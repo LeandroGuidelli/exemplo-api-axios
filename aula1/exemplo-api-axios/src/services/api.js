@@ -1,7 +1,20 @@
 import axios from "axios";
 
-//crio a API para conexão
+// Cria a instância da API
 const api = axios.create({
-    timeout:2000
-})
+  baseURL: "https://dog.ceo/api",
+  timeout: 5000,
+});
+
+// Função para buscar imagens aleatórias de cachorro
+export const getRandomDogs = async (count = 1) => {
+  const requests = Array.from({ length: count }, () =>
+    api.get("/breeds/image/random")
+  );
+  const responses = await Promise.all(requests);
+  // Remove duplicadas
+  const urls = Array.from(new Set(responses.map(r => r.data.message)));
+  return urls;
+};
+
 export default api;
